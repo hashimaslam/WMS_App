@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
-import NavBar from "./NavBar/index";
+import NavBar from "./Navbar/index.js";
 import TopBar from "./TopBar";
 
 const useStyles = makeStyles((theme) => ({
