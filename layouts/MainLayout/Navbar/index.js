@@ -34,17 +34,17 @@ const user = {
 
 const items = [
   {
-    href: "/app/accounts",
+    href: "/accounts",
     icon: BarChartIcon,
     title: "Accounts",
   },
   {
-    href: "/app/sites",
+    href: "/",
     icon: UsersIcon,
     title: "Sites",
   },
   {
-    href: "/app/locations",
+    href: "/locations",
     icon: ShoppingBagIcon,
     title: "Location",
   },

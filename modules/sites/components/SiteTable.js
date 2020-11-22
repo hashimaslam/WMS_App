@@ -20,7 +20,8 @@ import {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    overflow: "scroll",
+    overflowX: "scroll",
+    "&-webkit-overflow-scrolling": "touch",
   },
   avatar: {
     marginRight: theme.spacing(2),
