@@ -10,13 +10,17 @@
   "dependencies": {
     "@material-ui/core": "latest",
     "@material-ui/icons": "^4.9.1",
+    "babel-plugin-inline-react-svg": "^1.1.2",
     "clsx": "latest",
     "moment": "^2.29.1",
     "next": "10.0.1",
     "prop-types": "latest",
     "react": "17.0.1",
+    "react-barcode": "^1.4.0",
+    "react-barcodes": "^1.0.3",
     "react-dom": "17.0.1",
     "react-feather": "^2.0.8",
-    "react-perfect-scrollbar": "^1.5.8"
+    "react-perfect-scrollbar": "^1.5.8",
+    "react-to-print": "^2.11.0"
   }
 }

@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SearchFilter() {
+function SearchFilter({ filters }) {
   const classes = useStyles();
   const [age, setAge] = React.useState("");
   const theme = useTheme();
@@ -76,108 +76,112 @@ function SearchFilter() {
             </Button>
           </Box>
 
-          {matches === false ? (
-            <>
-              <Typography className={classes.filterTitle}>Filters</Typography>
-              <Box display="flex" className={classes.filterContainer}>
-                <FormControl
-                  variant="outlined"
-                  size="small"
-                  margin="dense"
-                  className={classes.formControl}
-                >
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    Age
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={age}
-                    onChange={handleChange}
-                    label="Age"
+          {filters === true ? (
+            matches === false ? (
+              <>
+                <Typography className={classes.filterTitle}>Filters</Typography>
+                <Box display="flex" className={classes.filterContainer}>
+                  <FormControl
+                    variant="outlined"
+                    size="small"
+                    margin="dense"
+                    className={classes.formControl}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl
-                  size="small"
-                  margin="dense"
-                  variant="outlined"
-                  className={classes.formControl}
-                >
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    Age
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={age}
-                    onChange={handleChange}
-                    label="Age"
+                    <InputLabel id="demo-simple-select-outlined-label">
+                      Age
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      value={age}
+                      onChange={handleChange}
+                      label="Age"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    size="small"
+                    margin="dense"
+                    variant="outlined"
+                    className={classes.formControl}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl
-                  size="small"
-                  margin="dense"
-                  variant="outlined"
-                  className={classes.formControl}
-                >
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    Age
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={age}
-                    onChange={handleChange}
-                    label="Age"
+                    <InputLabel id="demo-simple-select-outlined-label">
+                      Age
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      value={age}
+                      onChange={handleChange}
+                      label="Age"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    size="small"
+                    margin="dense"
+                    variant="outlined"
+                    className={classes.formControl}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
+                    <InputLabel id="demo-simple-select-outlined-label">
+                      Age
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      value={age}
+                      onChange={handleChange}
+                      label="Age"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </>
+            ) : (
+              <Box mt={3} display="flex" justifyContent="center">
+                <Button
+                  onClick={() => setOpen(true)}
+                  startIcon={<FilterIcon size={15} />}
+                  variant="outlined"
+                  color="primary"
+                >
+                  Filters
+                </Button>
+                <Drawer
+                  anchor="bottom"
+                  open={open}
+                  onClose={() => setOpen(false)}
+                >
+                  <div
+                    role="presentation"
+                    onClick={() => setOpen(false)}
+                    onKeyDown={() => setOpen(false)}
+                  >
+                    <MdsearchFilter />
+                  </div>
+                </Drawer>
               </Box>
-            </>
+            )
           ) : (
-            <Box mt={3} display="flex" justifyContent="center">
-              <Button
-                onClick={() => setOpen(true)}
-                startIcon={<FilterIcon size={15} />}
-                variant="outlined"
-                color="primary"
-              >
-                Filters
-              </Button>
-              <Drawer
-                anchor="bottom"
-                open={open}
-                onClose={() => setOpen(false)}
-              >
-                <div
-                  role="presentation"
-                  onClick={() => setOpen(false)}
-                  onKeyDown={() => setOpen(false)}
-                >
-                  <MdsearchFilter />
-                </div>
-              </Drawer>
-            </Box>
+            ""
           )}
         </Box>
       </CardContent>

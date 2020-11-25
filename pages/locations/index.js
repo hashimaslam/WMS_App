@@ -23,9 +23,9 @@ export default function Locations() {
             </Button>
           </Link>
         </Box>
-        <SearchFilter />
+        <SearchFilter filters={true} />
         <Box mt={3} />
-        <SiteTable customers={data} />
+        <SiteTable customers={data} print={false} />
       </Box>
     </MainLayout>
   );

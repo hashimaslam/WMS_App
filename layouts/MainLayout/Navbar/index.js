@@ -24,6 +24,7 @@ import {
   ShoppingBag as ShoppingBagIcon,
   Users as UsersIcon,
 } from "react-feather";
+import LocationIcon from "../../../public/location.svg";
 import NavItem from "./Navitem";
 
 const user = {
@@ -45,8 +46,32 @@ const items = [
   },
   {
     href: "/locations",
-    icon: ShoppingBagIcon,
+    icon: BarChartIcon,
     title: "Location",
+  },
+];
+const inbound = [
+  {
+    href: "/inbound/dockin",
+    icon: ShoppingBagIcon,
+    title: "DockIn",
+  },
+  {
+    href: "/inbound/binning",
+    icon: ShoppingBagIcon,
+    title: "Binning",
+  },
+];
+const outbound = [
+  {
+    href: "/inbound/dockin",
+    icon: ShoppingBagIcon,
+    title: "DockIn",
+  },
+  {
+    href: "/inbound/binning",
+    icon: ShoppingBagIcon,
+    title: "Binning",
   },
 ];
 
@@ -93,11 +118,12 @@ const useStyles = makeStyles((theme) => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const router = useRouter();
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
+  const [masterOpen, setMasterOpen] = React.useState(true);
+  const [inboundOpen, setInboundOpen] = React.useState(true);
+  const [outboundOpen, setOutboundOpen] = React.useState(true);
+  // const handleClick = () => {
+  //   setOpen(!open);
+  // };
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -117,15 +143,55 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           <ListItem
             disableGutters
             button
-            onClick={handleClick}
+            onClick={() => setMasterOpen(!masterOpen)}
             className={classes.button}
           >
             <GridIcon className={classes.icon} size="20" />
             <span className={classes.title}>Master</span>
-            {open ? <ExpandLess /> : <ExpandMore />}
+            {masterOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={masterOpen} timeout="auto" unmountOnExit>
             {items.map((item) => (
+              <NavItem
+                href={item.href}
+                key={item.title}
+                title={item.title}
+                icon={item.icon}
+              />
+            ))}
+          </Collapse>
+          <ListItem
+            disableGutters
+            button
+            onClick={() => setInboundOpen(!inboundOpen)}
+            className={classes.button}
+          >
+            <GridIcon className={classes.icon} size="20" />
+            <span className={classes.title}>Inbound</span>
+            {inboundOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={inboundOpen} timeout="auto" unmountOnExit>
+            {inbound.map((item) => (
+              <NavItem
+                href={item.href}
+                key={item.title}
+                title={item.title}
+                icon={item.icon}
+              />
+            ))}
+          </Collapse>
+          <ListItem
+            disableGutters
+            button
+            onClick={() => setOutboundOpen(!outboundOpen)}
+            className={classes.button}
+          >
+            <GridIcon className={classes.icon} size="20" />
+            <span className={classes.title}>Outbound</span>
+            {outboundOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={outboundOpen} timeout="auto" unmountOnExit>
+            {outbound.map((item) => (
               <NavItem
                 href={item.href}
                 key={item.title}
