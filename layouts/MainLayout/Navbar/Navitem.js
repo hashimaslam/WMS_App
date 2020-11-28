@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-start",
     letterSpacing: 0,
     padding: "10px 8px",
+    margin: "3px 0px",
     textTransform: "none",
     width: "100%",
     "&:hover": {
@@ -42,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
     "& $icon": {
       color: theme.palette.primary.main,
     },
+    backgroundColor: "#cbc8e3",
+    color: "#3523c2",
   },
 }));
 

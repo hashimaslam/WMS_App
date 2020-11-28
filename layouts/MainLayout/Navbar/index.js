@@ -23,6 +23,12 @@ import {
   BarChart as BarChartIcon,
   ShoppingBag as ShoppingBagIcon,
   Users as UsersIcon,
+  ArrowDownCircle as ArrowDownIcon,
+  ArrowUpCircle as ArrowUpIcon,
+  Layers as SiteIcon,
+  Inbox as DockinIcon,
+  Package as PickingIcon,
+  Navigation2 as BinningIcon,
 } from "react-feather";
 import LocationIcon from "../../../public/location.svg";
 import NavItem from "./Navitem";
@@ -36,12 +42,12 @@ const user = {
 const items = [
   {
     href: "/accounts",
-    icon: BarChartIcon,
+    icon: UsersIcon,
     title: "Accounts",
   },
   {
     href: "/",
-    icon: UsersIcon,
+    icon: SiteIcon,
     title: "Sites",
   },
   {
@@ -53,25 +59,25 @@ const items = [
 const inbound = [
   {
     href: "/inbound/dockin",
-    icon: ShoppingBagIcon,
+    icon: DockinIcon,
     title: "DockIn",
   },
   {
     href: "/inbound/binning",
-    icon: ShoppingBagIcon,
+    icon: BinningIcon,
     title: "Binning",
   },
 ];
 const outbound = [
   {
-    href: "/inbound/dockin",
-    icon: ShoppingBagIcon,
-    title: "DockIn",
+    href: "/outbound/picking",
+    icon: PickingIcon,
+    title: "Picking",
   },
   {
-    href: "/inbound/binning",
+    href: "/outbound/dispatch",
     icon: ShoppingBagIcon,
-    title: "Binning",
+    title: "Dispatch",
   },
 ];
 
@@ -166,7 +172,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             onClick={() => setInboundOpen(!inboundOpen)}
             className={classes.button}
           >
-            <GridIcon className={classes.icon} size="20" />
+            <ArrowDownIcon className={classes.icon} size="20" />
             <span className={classes.title}>Inbound</span>
             {inboundOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
@@ -186,7 +192,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             onClick={() => setOutboundOpen(!outboundOpen)}
             className={classes.button}
           >
-            <GridIcon className={classes.icon} size="20" />
+            <ArrowUpIcon className={classes.icon} size="20" />
             <span className={classes.title}>Outbound</span>
             {outboundOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>

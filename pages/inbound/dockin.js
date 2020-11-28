@@ -11,7 +11,7 @@ export default function InboundDockin() {
     <MainLayout>
       <Box m={3}>
         <Box mb={3} display="flex" justifyContent="flex-end">
-          <Link href="/sites/add">
+          <Link href="/inbound/create">
             <Button
               color="primary"
               size="medium"
