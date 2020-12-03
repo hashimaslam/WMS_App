@@ -4,8 +4,8 @@ class BarcodePrint extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 1,
-      height: 50,
+      width: 1.5,
+      height: 70,
     };
   }
   render() {

@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
+import Box from "@material-ui/core/Box";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
@@ -49,11 +49,9 @@ export default function PrintModal({ value }) {
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogContent>
-          <DialogContentText>
-            <BarcodePrint ref={componentRef} value={value} />
-          </DialogContentText>
-        </DialogContent>
+        <Box>
+          <BarcodePrint ref={componentRef} value={value} />
+        </Box>
         <DialogActions>
           <Button autoFocus onClick={handlePrint} color="primary">
             Print
