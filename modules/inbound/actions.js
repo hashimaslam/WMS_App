@@ -50,8 +50,8 @@ export const checkBarcode = async (dispatch, body, state) => {
         let newObj = {
           ...state.bodyObj,
           data: {
+            ...state.bodyObj.data,
             islocation: false,
-            barcode: "PART003-MAGGI",
           },
         };
         dispatch(setBodyObj(newObj));

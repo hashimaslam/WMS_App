@@ -80,7 +80,12 @@ export default function binSacn() {
       bShowScanner: false,
     });
     setLoading(true);
-    let loaded = await checkBarcode(dispatch, bodyObj, state);
+    let newObj = {
+      ...bodyObj,
+      data: { ...bodyObj.data, barcode: str },
+    };
+
+    let loaded = await checkBarcode(dispatch, newObj, state);
     setLoading(!loaded);
     setScannerState({
       text: "",
