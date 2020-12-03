@@ -16,7 +16,11 @@ import useSound from "use-sound";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import scanFx from "../../public/zapsplat_public_places_supermarket_till_scan_beep_single_26430.mp3";
-import { checkBarcode, handleInsert } from "../../modules/inbound/actions";
+import {
+  checkBarcode,
+  handleInsert,
+  stateReset,
+} from "../../modules/inbound/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 
@@ -55,7 +59,7 @@ export default function binSacn() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.inBound);
 
-  const { bodyObj, locationData, partData, error } = state;
+  const { bodyObj, locationData, partData, partBarcode, error } = state;
   const [loading, setLoading] = useState(false);
   const [play] = useSound(scanFx, { volume: 0.5 });
   const [scannerState, setScannerState] = useState({
@@ -74,7 +78,7 @@ export default function binSacn() {
     setBarcodeManual("");
   }, [locationData]);
   useEffect(() => {
-    partQty !== null ? setAll(true) : "";
+    partQty !== null ? setAll(true) : setAll(false);
   }, [partQty]);
   useEffect(() => {
     error.status &&
@@ -107,11 +111,17 @@ export default function binSacn() {
     });
   };
   const handlePartQty = (e) => {
-    if (e.target.value >= partData.requestquantity) {
+    let tempAvailQty = partData.requestquantity - partData.scannedquantity;
+    if (
+      e.target.value > partData.requestquantity ||
+      e.target.value > tempAvailQty
+    ) {
       enqueueSnackbar(
         "Entered quantity higher than requested quantity of" +
           " " +
-          partData.requestquantity,
+          partData.requestquantity +
+          "or greater than scanned Quantity of" +
+          (partData.requestquantity - partData.scannedquantity),
         {
           variant: "error",
           anchorOrigin: {
@@ -146,7 +156,11 @@ export default function binSacn() {
   const handleDocPartQty = (e) => {
     partData.documentnumber.map((i) => {
       if (i.documentnumber === docNumber) {
-        if (e.target.value > i.requestquantity) {
+        let tempAvailQty = i.requestquantity - i.scannedquantity;
+        if (
+          e.target.value > i.requestquantity ||
+          e.target.value > tempAvailQty
+        ) {
           enqueueSnackbar(
             "Entered quantity higher than requested quantityof" +
               " " +
@@ -171,13 +185,14 @@ export default function binSacn() {
       documentnumber: docNumber,
     };
     let res = await handleInsert(dispatch, data, state);
-    enqueueSnackbar(res, {
-      variant: "error",
+    enqueueSnackbar(res.message, {
+      variant: "success",
       anchorOrigin: {
         vertical: "top",
         horizontal: "center",
       },
     });
+    stateReset(dispatch, state);
   };
 
   return (
@@ -222,12 +237,19 @@ export default function binSacn() {
             ""
           )}
           {partData.partnumber ? (
-            <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
+            <Box className={classes.codeLabels} component="div" mt={2}>
               <Typography className={classes.strongTxt}>PART NUMBER</Typography>
               <Typography>{partData.partnumber}</Typography>
             </Box>
           ) : (
             ""
+          )}
+
+          {partBarcode !== null && (
+            <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
+              <Typography className={classes.strongTxt}>LPN</Typography>
+              <Typography>{partBarcode}</Typography>
+            </Box>
           )}
 
           {partData.parttype !== undefined && partData.parttype === "V" && (
@@ -243,7 +265,7 @@ export default function binSacn() {
               />
             </>
           )}
-          {partData.parttype !== undefined && partData.parttype === "NV" && (
+          {/* {partData.parttype !== undefined && partData.parttype === "NV" && (
             <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
               <Typography>Scanned</Typography>
               <Typography>
@@ -251,7 +273,7 @@ export default function binSacn() {
                 {partData.requestquantity - partData.scannedquantity}
               </Typography>
             </Box>
-          )}
+          )} */}
           {partData.parttype !== undefined && partData.parttype === "NVNU" && (
             <>
               <FormControl

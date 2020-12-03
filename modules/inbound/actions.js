@@ -107,9 +107,9 @@ export const handleInsert = async (dispatch, data, state) => {
     const res = await fetch(API_URL, bodyOptions);
     const data = await res.json();
     if (data.statuscode === 200) {
-      return { message: "Binned Successfully" };
+      return { message: data.message };
     } else {
-      return { message: "Something Went Wrong,Please try Again" };
+      return { message: data.message };
     }
   } catch (error) {
     dispatch(
@@ -119,4 +119,18 @@ export const handleInsert = async (dispatch, data, state) => {
       })
     );
   }
+};
+
+export const stateReset = async (dispatch, state) => {
+  let newObj = {
+    ...state.bodyObj,
+    data: {
+      ...state.bodyObj.data,
+      islocation: true,
+    },
+  };
+  dispatch(setLocationData([]));
+  dispatch(setPartData([]));
+  dispatch(setPartBarcode(null));
+  dispatch(setBodyObj(newObj));
 };

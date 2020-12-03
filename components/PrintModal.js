@@ -45,7 +45,6 @@ export default function PrintModal({ value }) {
         Print
       </Button>
       <Dialog
-        fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"

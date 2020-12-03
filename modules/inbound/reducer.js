@@ -10,7 +10,7 @@ import {
 const initialTimerState = {
   partData: [],
   locationData: [],
-  partBarcode: "",
+  partBarcode: null,
   error: {
     status: false,
     message: "",
