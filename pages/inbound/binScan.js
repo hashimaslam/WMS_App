@@ -55,7 +55,7 @@ export default function binSacn() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.inBound);
 
-  const { bodyObj, locationData, partData } = state;
+  const { bodyObj, locationData, partData, error } = state;
   const [loading, setLoading] = useState(false);
   const [play] = useSound(scanFx, { volume: 0.5 });
   const [scannerState, setScannerState] = useState({
@@ -66,12 +66,26 @@ export default function binSacn() {
   const [docNumber, setDocNumber] = useState(null);
   const [partQty, setPartQty] = useState(null);
   const [barcodeManual, setBarcodeManual] = useState("");
+  const [all, setAll] = useState(false);
 
   useEffect(() => {
     setPartQty(null);
     setDocNumber(null);
     setBarcodeManual("");
   }, [locationData]);
+  useEffect(() => {
+    partQty !== null ? setAll(true) : "";
+  }, [partQty]);
+  useEffect(() => {
+    error.status &&
+      enqueueSnackbar(error.message, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "center",
+        },
+      });
+  }, [error]);
 
   const appendMessage = async (str) => {
     play();
@@ -120,7 +134,7 @@ export default function binSacn() {
       ...bodyObj,
       data: {
         islocation: false,
-        barcode: "PART003-MAGGI",
+        barcode: barcodeManual,
       },
     };
     let loaded = await checkBarcode(dispatch, newObj, state);
@@ -159,6 +173,25 @@ export default function binSacn() {
           appendMessage={appendMessage}
           bShowScanner={scannerState.bShowScanner}
         />
+        <Box
+          style={{ width: "100%" }}
+          display="flex"
+          justifyContent="center"
+          mt={2}
+        >
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() =>
+              setScannerState({
+                ...scannerState,
+                bShowScanner: !scannerState.bShowScanner,
+              })
+            }
+          >
+            {scannerState.bShowScanner ? "Hide Scanner" : "Show Scanner"}
+          </Button>
+        </Box>
         <Box
           className={classes.scanItem}
           display="flex"
@@ -274,9 +307,11 @@ export default function binSacn() {
               Validate
             </Button>
           </Box>
-          <Button color="primary" variant="contained">
-            Apply
-          </Button>
+          {all && (
+            <Button color="primary" variant="contained">
+              Apply
+            </Button>
+          )}
         </Box>
       </Box>
       <Backdrop className={classes.backdrop} open={loading}>

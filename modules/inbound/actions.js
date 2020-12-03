@@ -4,6 +4,7 @@ export const SET_REQUESTS = "inbound/dockin/SET_REQUESTS";
 export const SET_PARTDATA = "inbound/dockin/SET_PARTDATA";
 export const SET_LOCATIONDATA = "inbound/dockin/SET_LOCATIONDATA";
 export const SET_BODYOBJ = "inbound/dockin/SET_BODYOBJ";
+export const SET_ERROR = "inbound/dockin/SET_ERROR";
 
 export const setLocationData = (data) => ({
   type: SET_LOCATIONDATA,
@@ -11,6 +12,10 @@ export const setLocationData = (data) => ({
 });
 export const setPartData = (data) => ({
   type: SET_PARTDATA,
+  payload: data,
+});
+export const setError = (data) => ({
+  type: SET_ERROR,
   payload: data,
 });
 
@@ -46,6 +51,7 @@ export const checkBarcode = async (dispatch, body, state) => {
     if (data.statuscode === 200) {
       if (data.data.location !== "") {
         dispatch(setLocationData(data.data));
+        dispatch(setError({ status: false, message: "" }));
         dispatch(setPartData([]));
         let newObj = {
           ...state.bodyObj,
@@ -57,9 +63,10 @@ export const checkBarcode = async (dispatch, body, state) => {
         dispatch(setBodyObj(newObj));
       } else {
         dispatch(setPartData(data.data));
+        dispatch(setError({ status: false, message: "" }));
       }
     } else {
-      console.log(error);
+      dispatch(setError({ status: true, message: data.data }));
     }
   } catch (err) {
     console.log(`Something went wrong with ${err}`);

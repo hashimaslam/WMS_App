@@ -17,21 +17,12 @@ class BCwrapper extends React.Component {
   render() {
     return (
       <div>
-        {this.props.bShowScanner ? (
+        {this.props.bShowScanner && (
           <div>
             <BarcodeScanner
               appendMessage={this.props.appendMessage}
             ></BarcodeScanner>
           </div>
-        ) : (
-          <Box
-            m={3}
-            style={{
-              width: "95%",
-              height: "400px",
-              background: "white",
-            }}
-          ></Box>
         )}
       </div>
     );

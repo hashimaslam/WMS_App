@@ -3,11 +3,16 @@ import {
   SET_PARTDATA,
   SET_LOCATIONDATA,
   SET_BODYOBJ,
+  SET_ERROR,
 } from "./actions";
 
 const initialTimerState = {
   partData: [],
   locationData: [],
+  error: {
+    status: false,
+    message: "",
+  },
   bodyObj: {
     type: "inbound",
     action: "scan",
@@ -39,6 +44,11 @@ export const inBound = (state = initialTimerState, { type, payload }) => {
       return {
         ...state,
         bodyObj: payload,
+      };
+    case SET_ERROR:
+      return {
+        ...state,
+        error: payload,
       };
     default:
       return state;
