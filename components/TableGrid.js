@@ -152,7 +152,13 @@ const TableGrid = ({ className, data, row, barcodeKey, print, ...rest }) => {
                     })}
                     {print && (
                       <StyledTableCell>
-                        <PrintModal value={[...item[barcodeKey]]} />
+                        <PrintModal
+                          value={
+                            Array.isArray(item[barcodeKey])
+                              ? [...item[barcodeKey]]
+                              : [item[barcodeKey]]
+                          }
+                        />
                       </StyledTableCell>
                     )}
                   </StyledTableRow>
