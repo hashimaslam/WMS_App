@@ -16,7 +16,7 @@ import useSound from "use-sound";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import scanFx from "../../public/zapsplat_public_places_supermarket_till_scan_beep_single_26430.mp3";
-import { checkBarcode } from "../../modules/inbound/actions";
+import { checkBarcode, handleInsert } from "../../modules/inbound/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 
@@ -99,7 +99,7 @@ export default function binSacn() {
       data: { ...bodyObj.data, barcode: str },
     };
 
-    let loaded = await checkBarcode(dispatch, newObj, state);
+    let loaded = await checkBarcode(dispatch, newObj, state, str);
     setLoading(!loaded);
     setScannerState({
       text: "",
@@ -163,6 +163,20 @@ export default function binSacn() {
           setPartQty(e.target.value);
         }
       }
+    });
+  };
+  const handleSubmit = async () => {
+    let data = {
+      quantity: partQty,
+      documentnumber: docNumber,
+    };
+    let res = await handleInsert(dispatch, data, state);
+    enqueueSnackbar(res, {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "center",
+      },
     });
   };
 
@@ -308,7 +322,7 @@ export default function binSacn() {
             </Button>
           </Box>
           {all && (
-            <Button color="primary" variant="contained">
+            <Button color="primary" variant="contained" onClick={handleSubmit}>
               Apply
             </Button>
           )}

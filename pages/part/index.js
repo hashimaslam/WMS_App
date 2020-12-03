@@ -102,7 +102,7 @@ const rows = [
   },
 ];
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const data = await request(API_URL, {
     type: "part",
     action: "view",

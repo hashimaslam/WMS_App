@@ -5,6 +5,7 @@ export const SET_PARTDATA = "inbound/dockin/SET_PARTDATA";
 export const SET_LOCATIONDATA = "inbound/dockin/SET_LOCATIONDATA";
 export const SET_BODYOBJ = "inbound/dockin/SET_BODYOBJ";
 export const SET_ERROR = "inbound/dockin/SET_ERROR";
+export const SET_PART_BARCODE = "inbound/dockin/SET_PART_BARCODE";
 
 export const setLocationData = (data) => ({
   type: SET_LOCATIONDATA,
@@ -23,6 +24,10 @@ export const setBodyObj = (body) => ({
   type: SET_BODYOBJ,
   payload: body,
 });
+export const setPartBarcode = (data) => ({
+  type: SET_PART_BARCODE,
+  payload: data,
+});
 
 export const setRequests = async (dispatch, data) => {
   let message = "Added successfully";
@@ -34,7 +39,7 @@ export const setRequests = async (dispatch, data) => {
   return message;
 };
 
-export const checkBarcode = async (dispatch, body, state) => {
+export const checkBarcode = async (dispatch, body, state, barcode) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   const bodyOptions = {
@@ -63,6 +68,7 @@ export const checkBarcode = async (dispatch, body, state) => {
         dispatch(setBodyObj(newObj));
       } else {
         dispatch(setPartData(data.data));
+        dispatch(setPartBarcode(barcode));
         dispatch(setError({ status: false, message: "" }));
       }
     } else {
@@ -72,4 +78,45 @@ export const checkBarcode = async (dispatch, body, state) => {
     console.log(`Something went wrong with ${err}`);
   }
   return true;
+};
+
+export const handleInsert = async (dispatch, data, state) => {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  let bodyValue = {
+    type: "inbound",
+    action: "insert",
+    data: {
+      locationkey: state.locationData.locationkey,
+      locationname: state.locationData.locationname,
+      parttype: state.partData.parttype,
+      partnumber: state.partData.partnumber,
+      barcode: state.partBarcode,
+      quantity: data.quantity,
+      documentnumber: data.documentnumber,
+    },
+  };
+  const bodyOptions = {
+    method: "POST",
+    headers: myHeaders,
+    redirect: "follow",
+    body: JSON.stringify(bodyValue),
+  };
+
+  try {
+    const res = await fetch(API_URL, bodyOptions);
+    const data = await res.json();
+    if (data.statuscode === 200) {
+      return { message: "Binned Successfully" };
+    } else {
+      return { message: "Something Went Wrong,Please try Again" };
+    }
+  } catch (error) {
+    dispatch(
+      setError({
+        status: true,
+        message: "Something Went Wrong,Please try Again",
+      })
+    );
+  }
 };
