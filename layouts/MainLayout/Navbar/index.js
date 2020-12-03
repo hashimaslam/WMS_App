@@ -21,7 +21,6 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import {
   Grid as GridIcon,
   BarChart as BarChartIcon,
-  ShoppingBag as ShoppingBagIcon,
   Users as UsersIcon,
   ArrowDownCircle as ArrowDownIcon,
   ArrowUpCircle as ArrowUpIcon,
@@ -29,15 +28,11 @@ import {
   Inbox as DockinIcon,
   Package as PickingIcon,
   Navigation2 as BinningIcon,
+  Truck as DispatchIcon,
+  Trello as PartIcon,
+  MapPin as LocationIcon,
 } from "react-feather";
-import LocationIcon from "../../../public/location.svg";
 import NavItem from "./Navitem";
-
-const user = {
-  avatar: "/static/images/avatars/avatar_6.png",
-  jobTitle: "Senior Developer",
-  name: "Katarina Smith",
-};
 
 const items = [
   {
@@ -52,8 +47,13 @@ const items = [
   },
   {
     href: "/locations",
-    icon: BarChartIcon,
+    icon: LocationIcon,
     title: "Location",
+  },
+  {
+    href: "/part",
+    icon: PartIcon,
+    title: "Part Item",
   },
 ];
 const inbound = [
@@ -76,7 +76,7 @@ const outbound = [
   },
   {
     href: "/outbound/dispatch",
-    icon: ShoppingBagIcon,
+    icon: DispatchIcon,
     title: "Dispatch",
   },
 ];

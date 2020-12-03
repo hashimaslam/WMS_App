@@ -1,5 +1,5 @@
 import MainLayout from "../../layouts/MainLayout";
-import AddForm from "../../modules/sites/components/AddForm";
+import AddForm from "../../modules/accounts/components/AddForm";
 
 const CreateAccounts = () => {
   return (

@@ -30,6 +30,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "url-loader": "^4.1.1",
+    "use-dynamic-refs": "^1.0.0",
     "use-sound": "^2.0.1"
   }
 }

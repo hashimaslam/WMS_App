@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import SearchFilter from "../../components/SearchFilter";
-import TableGrid from "../../components/TableGrid";
 import { PlusCircle as PlusCircleIcon } from "react-feather";
 import { Box, Button } from "@material-ui/core";
-import Link from "next/link";
-
 import { API_URL } from "../../config";
 import request from "../../utils/request";
-export default function Locations({ data }) {
+import TableGrid from "../../components/TableGrid";
+import Link from "next/link";
+
+export default function Part({ data }) {
   const [open, setOpen] = React.useState(false);
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -21,20 +21,20 @@ export default function Locations({ data }) {
     <MainLayout>
       <Box m={3}>
         <Box mb={3} display="flex" justifyContent="flex-end">
-          <Link href="/locations/add">
+          <Link href="/part/add">
             <Button
               color="primary"
               size="medium"
               variant="contained"
               startIcon={<PlusCircleIcon />}
             >
-              Add New Location
+              Add New Part
             </Button>
           </Link>
         </Box>
         <SearchFilter
           filters={true}
-          placeholder="Search Location"
+          placeholder="Search Part"
           filterValues={[
             {
               label: "Is Active",
@@ -66,21 +66,6 @@ export default function Locations({ data }) {
                 },
               ],
             },
-            {
-              label: "Site Name",
-              placeholder: "select",
-              name: "site_name",
-              items: [
-                {
-                  name: "Site1",
-                  value: "site1",
-                },
-                {
-                  name: "Site1",
-                  value: "site1",
-                },
-              ],
-            },
           ]}
           handleChange={handleChange}
           handleApply={handleApply}
@@ -88,38 +73,28 @@ export default function Locations({ data }) {
           setOpen={setOpen}
         />
         <Box mt={3} />
-        <TableGrid
-          data={data}
-          row={rows}
-          print={true}
-          barcodeKey={"locationname"}
-        />
+        <TableGrid data={data} row={rows} print={false} />
       </Box>
     </MainLayout>
   );
 }
-
 const rows = [
   {
     name: "Account Name",
     key: "accountname",
   },
   {
-    name: "Site Code",
-    key: "sitecode",
+    name: "Part Code",
+    key: "partnumber",
   },
   {
-    name: "Site Name",
-    key: "sitename",
+    name: "Part Name",
+    key: "partname",
   },
 
   {
-    name: "Location Name",
-    key: "locationname",
-  },
-  {
-    name: "Hazardous",
-    key: "hazardous",
+    name: "Part Type",
+    key: "typevalue",
   },
   {
     name: "IsActive",
@@ -129,7 +104,7 @@ const rows = [
 
 export async function getStaticProps() {
   const data = await request(API_URL, {
-    type: "location",
+    type: "part",
     action: "view",
   });
   return {

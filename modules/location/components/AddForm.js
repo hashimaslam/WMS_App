@@ -35,6 +35,7 @@ function AddForm() {
   const classes = useStyles();
   const [state, setState] = React.useState({
     isActive: false,
+    hazardous: false,
   });
 
   const handleChange = (event) => {
@@ -45,7 +46,7 @@ function AddForm() {
       <Box m={2}>
         <Card>
           <CardHeader
-            title="SITE INFO"
+            title="LOCATION INFO"
             className={classes.cardHead}
           ></CardHeader>
           <CardContent>
@@ -71,22 +72,6 @@ function AddForm() {
                 </FormControl>
               </Grid>
               <Grid item xs={6} sm={6} lg={2} xl={2}>
-                <TextField
-                  label="Site Code"
-                  margin="dense"
-                  variant="outlined"
-                  required
-                />
-              </Grid>
-              <Grid item xs={6} sm={6} lg={2} xl={2}>
-                <TextField
-                  label="Site Name"
-                  margin="dense"
-                  variant="outlined"
-                  required
-                />
-              </Grid>
-              <Grid item xs={6} sm={6} lg={2} xl={2}>
                 <FormControl
                   variant="outlined"
                   size="small"
@@ -94,17 +79,39 @@ function AddForm() {
                   className={classes.formControl}
                 >
                   <InputLabel id="demo-simple-select-outlined-label">
-                    Site Type
+                    Site Name
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    label="Site Type"
+                    label="Site Name"
                   >
-                    <MenuItem value="warehouse">Warehouse</MenuItem>
-                    <MenuItem value="loaction">Location</MenuItem>
+                    <MenuItem value="acc2">Acc1</MenuItem>
+                    <MenuItem value="acc3">Acc2</MenuItem>
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={6} sm={6} lg={2} xl={2}>
+                <TextField
+                  label="Location"
+                  margin="dense"
+                  variant="outlined"
+                  required
+                />
+              </Grid>
+              <Grid item xs={6} sm={6} lg={2} xl={2}>
+                <FormControlLabel
+                  className={classes.isActive}
+                  control={
+                    <Switch
+                      checked={state.isActive}
+                      onChange={handleChange}
+                      name="hazardous"
+                      required
+                    />
+                  }
+                  label="Hazardous"
+                />
               </Grid>
               <Grid item xs={6} sm={6} lg={4} xl={4}>
                 <FormControlLabel

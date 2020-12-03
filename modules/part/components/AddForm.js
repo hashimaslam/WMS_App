@@ -72,7 +72,7 @@ function AddForm() {
               </Grid>
               <Grid item xs={6} sm={6} lg={2} xl={2}>
                 <TextField
-                  label="Site Code"
+                  label="Part Number"
                   margin="dense"
                   variant="outlined"
                   required
@@ -80,7 +80,7 @@ function AddForm() {
               </Grid>
               <Grid item xs={6} sm={6} lg={2} xl={2}>
                 <TextField
-                  label="Site Name"
+                  label="Part Description"
                   margin="dense"
                   variant="outlined"
                   required
@@ -94,15 +94,17 @@ function AddForm() {
                   className={classes.formControl}
                 >
                   <InputLabel id="demo-simple-select-outlined-label">
-                    Site Type
+                    Part Type
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     label="Site Type"
                   >
-                    <MenuItem value="warehouse">Warehouse</MenuItem>
-                    <MenuItem value="loaction">Location</MenuItem>
+                    <MenuItem value="NV">NV</MenuItem>
+                    <MenuItem value="V">V</MenuItem>
+                    <MenuItem value="NV">NV</MenuItem>
+                    <MenuItem value="NVNU">NVNU</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -119,6 +121,28 @@ function AddForm() {
                   }
                   label="IsActive"
                 />
+              </Grid>
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item xs={6} sm={6} lg={2} xl={2}>
+                <FormControl
+                  variant="outlined"
+                  size="small"
+                  margin="dense"
+                  className={classes.formControl}
+                >
+                  <InputLabel id="demo-simple-select-outlined-label">
+                    CUS/LPN No
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    label="CUS/LPN No"
+                  >
+                    <MenuItem value="NV">Yes</MenuItem>
+                    <MenuItem value="V">No</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
           </CardContent>

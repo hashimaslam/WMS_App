@@ -1,9 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
-import PropTypes from "prop-types";
-import moment from "moment";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import { useReactToPrint } from "react-to-print";
+
 import {
   Box,
   Card,
@@ -14,10 +11,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
   makeStyles,
-  Button,
+  withStyles,
 } from "@material-ui/core";
+
+import PrintModal from "./PrintModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,15 +29,30 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
   },
 }));
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
-const TableGrid = ({ className, data, row, ...rest }) => {
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}))(TableRow);
+
+const TableGrid = ({ className, data, row, barcodeKey, print, ...rest }) => {
   const classes = useStyles();
   const [selectedDataIds, setSelectedDataIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
-  useEffect(() => {
-    console.log(row);
-  }, [row]);
+
   const handleSelectAll = (event) => {
     let newSelectedDataIds;
 
@@ -89,7 +102,7 @@ const TableGrid = ({ className, data, row, ...rest }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedDataIds.length === data.length}
                   color="primary"
@@ -99,31 +112,53 @@ const TableGrid = ({ className, data, row, ...rest }) => {
                   }
                   onChange={handleSelectAll}
                 />
-              </TableCell>
+              </TableCell> */}
               {row.map((i) => {
-                return <TableCell>{i.name}</TableCell>;
+                return <StyledTableCell>{i.name}</StyledTableCell>;
               })}
+              {print && <StyledTableCell>Actions</StyledTableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.slice(0, limit).map((item, index) => (
-              <TableRow
-                hover
-                key={item.id}
-                selected={selectedDataIds.indexOf(item.id) !== -1}
-              >
-                <TableCell padding="checkbox">
+            {data.slice(0, limit).map((item, index) => {
+              return (
+                <>
+                  <StyledTableRow
+                    hover
+                    key={index}
+                    // selected={selectedDataIds.indexOf(item.id) !== -1}
+                  >
+                    {/* <TableCell padding="checkbox">
                   <Checkbox
                     checked={selectedDataIds.indexOf(item.id) !== -1}
                     onChange={(event) => handleSelectOne(event, item.id)}
                     value="true"
                   />
-                </TableCell>
-                {row.map((i) => {
-                  return <TableCell>{item[i.key]}</TableCell>;
-                })}
-              </TableRow>
-            ))}
+                </TableCell> */}
+                    {row.map((i) => {
+                      if (i.name === "Quantity") {
+                        return (
+                          <StyledTableCell>
+                            {item.scannedquantity}/{item.requestquantity}
+                          </StyledTableCell>
+                        );
+                      } else {
+                        return (
+                          <StyledTableCell>
+                            {item[i.key].toString()}
+                          </StyledTableCell>
+                        );
+                      }
+                    })}
+                    {print && (
+                      <StyledTableCell>
+                        <PrintModal value={[...item[barcodeKey]]} />
+                      </StyledTableCell>
+                    )}
+                  </StyledTableRow>
+                </>
+              );
+            })}
           </TableBody>
         </Table>
       </Box>
@@ -140,10 +175,5 @@ const TableGrid = ({ className, data, row, ...rest }) => {
     </Card>
   );
 };
-
-// SiteTable.propTypes = {
-//   className: PropTypes.string,
-//   data: PropTypes.array.isRequired,
-// };
 
 export default TableGrid;

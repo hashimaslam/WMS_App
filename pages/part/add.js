@@ -1,5 +1,5 @@
 import MainLayout from "../../layouts/MainLayout";
-import AddForm from "../../modules/location/components/AddForm";
+import AddForm from "../../modules/part/components/AddForm";
 
 const CreateLocation = () => {
   return (

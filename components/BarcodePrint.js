@@ -1,6 +1,5 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-
+import React from "react";
+import Barcode from "react-barcode";
 class BarcodePrint extends React.Component {
   constructor(props) {
     super(props);
@@ -9,7 +8,9 @@ class BarcodePrint extends React.Component {
     return (
       <div style={{ margin: "50px" }}>
         <div>
-          <canvas ref={this.props.barcode} />;
+          {this.props.value.map((i) => {
+            return <Barcode value={i} />;
+          })}
         </div>
       </div>
     );

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
 import MainLayout from "../../layouts/MainLayout";
-import { Search as SearchIcon, Filter as FilterIcon } from "react-feather";
+import { Search as SearchIcon } from "react-feather";
 import TableGrid from "../../components/TableGrid";
+import { API_URL } from "../../config";
+import request from "../../utils/request";
 import {
   Box,
   Button,
@@ -19,10 +20,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: "100%",
   },
 }));
-export default function InboundBinning() {
+export default function InboundBinning({ data }) {
   const classes = useStyles();
-  const state = useSelector((state) => state);
-  const requests = state.inBound.requests;
 
   return (
     <>
@@ -59,36 +58,60 @@ export default function InboundBinning() {
           </Card>
         </Box>
         <Box m={3}>
-          <TableGrid data={requests} row={rows} />
+          <TableGrid
+            data={data}
+            row={rows}
+            print={true}
+            barcodeKey={"barcode"}
+          />
         </Box>
       </MainLayout>
     </>
   );
 }
-
 const rows = [
   {
-    name: "Destination Site",
-    key: "destination_site",
+    name: "Account Name",
+    key: "accountname",
   },
   {
-    name: "Invoice No",
-    key: "invoice_no",
+    name: "Site Code",
+    key: "sitecode",
   },
   {
-    name: "Reference",
-    key: "reference_1",
+    name: "Site Name",
+    key: "sitename",
   },
   {
-    name: "Part No",
-    key: "part_no",
+    name: "Invoice Number",
+    key: "documentnumber",
+  },
+  // {
+  //   name: "Internal ID",
+  //   key: "referenceid",
+  // },
+  {
+    name: "Part Number",
+    key: "partnumber",
   },
   {
     name: "Stock Type",
-    key: "stock_type",
+    key: "stocktype",
   },
   {
     name: "Quantity",
-    key: "quantity",
+    key: "requestquantity",
   },
 ];
+
+export async function getStaticProps() {
+  const data = await request(API_URL, {
+    type: "inbound",
+    action: "gridview",
+  });
+  return {
+    props: {
+      data,
+    },
+  };
+}
