@@ -147,7 +147,7 @@ export default function binSacn() {
         barcode: barcodeManual,
       },
     };
-    let loaded = await checkBarcode(dispatch, newObj, state);
+    let loaded = await checkBarcode(dispatch, newObj, state, barcodeManual);
     setLoading(!loaded);
   };
   const handleDocNumber = (e) => {
