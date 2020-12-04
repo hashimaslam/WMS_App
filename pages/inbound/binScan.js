@@ -81,6 +81,13 @@ export default function binSacn() {
     partQty !== null ? setAll(true) : setAll(false);
   }, [partQty]);
   useEffect(() => {
+    if (partData.parttype === "NV") {
+      setAll(true);
+    } else {
+      setAll(false);
+    }
+  }, [partData]);
+  useEffect(() => {
     error.status &&
       enqueueSnackbar(error.message, {
         variant: "error",
@@ -149,6 +156,7 @@ export default function binSacn() {
     };
     let loaded = await checkBarcode(dispatch, newObj, state, barcodeManual);
     setLoading(!loaded);
+    setBarcodeManual("");
   };
   const handleDocNumber = (e) => {
     setDocNumber(e.target.value);
