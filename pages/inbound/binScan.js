@@ -58,14 +58,13 @@ export default function binSacn() {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const state = useSelector((state) => state.inBound);
-
   const { bodyObj, locationData, partData, partBarcode, error } = state;
   const [loading, setLoading] = useState(false);
   const [play] = useSound(scanFx, { volume: 0.5 });
   const [scannerState, setScannerState] = useState({
     messageKeyBase: 0,
     text: "",
-    bShowScanner: true,
+    bShowScanner: false,
   });
   const [docNumber, setDocNumber] = useState(null);
   const [partQty, setPartQty] = useState(null);
@@ -127,7 +126,9 @@ export default function binSacn() {
         "Entered quantity higher than requested quantity of" +
           " " +
           partData.requestquantity +
+          " " +
           "or greater than scanned Quantity of" +
+          " " +
           (partData.requestquantity - partData.scannedquantity),
         {
           variant: "error",
@@ -170,9 +171,13 @@ export default function binSacn() {
           e.target.value > tempAvailQty
         ) {
           enqueueSnackbar(
-            "Entered quantity higher than requested quantityof" +
+            "Entered quantity higher than requested quantity of" +
               " " +
-              i.requestquantity,
+              i.requestquantity +
+              " " +
+              "or greater than scanned Quantity of" +
+              " " +
+              (i.requestquantity - i.scannedquantity),
             {
               variant: "error",
               anchorOrigin: {
@@ -189,7 +194,7 @@ export default function binSacn() {
   };
   const handleSubmit = async () => {
     let data = {
-      quantity: partQty,
+      quantity: partData.parttype === "NV" ? 1 : partQty,
       documentnumber: docNumber,
     };
     let res = await handleInsert(dispatch, data, state);

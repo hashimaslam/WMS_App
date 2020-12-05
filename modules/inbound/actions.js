@@ -58,6 +58,7 @@ export const checkBarcode = async (dispatch, body, state, barcode) => {
         dispatch(setLocationData(data.data));
         dispatch(setError({ status: false, message: "" }));
         dispatch(setPartData([]));
+        dispatch(setPartBarcode(null));
         let newObj = {
           ...state.bodyObj,
           data: {
@@ -67,9 +68,16 @@ export const checkBarcode = async (dispatch, body, state, barcode) => {
         };
         dispatch(setBodyObj(newObj));
       } else {
-        dispatch(setPartData(data.data));
-        dispatch(setPartBarcode(barcode));
-        dispatch(setError({ status: false, message: "" }));
+        if (state.locationData.location !== undefined) {
+          dispatch(setPartData(data.data));
+          dispatch(setPartBarcode(barcode));
+          dispatch(setError({ status: false, message: "" }));
+        } else {
+          dispatch(
+            setError({ status: true, message: "Please Enter Location First!" })
+          );
+          dispatch(setPartBarcode(null));
+        }
       }
     } else {
       dispatch(setError({ status: true, message: data.data }));
@@ -88,7 +96,7 @@ export const handleInsert = async (dispatch, data, state) => {
     action: "insert",
     data: {
       locationkey: state.locationData.locationkey,
-      locationname: state.locationData.locationname,
+      locationname: state.locationData.location,
       parttype: state.partData.parttype,
       partnumber: state.partData.partnumber,
       barcode: state.partBarcode,
