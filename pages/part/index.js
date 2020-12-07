@@ -3,7 +3,7 @@ import MainLayout from "../../layouts/MainLayout";
 import SearchFilter from "../../components/SearchFilter";
 import { PlusCircle as PlusCircleIcon } from "react-feather";
 import { Box, Button } from "@material-ui/core";
-import { API_URL } from "../../config";
+import { API_URL, PartView } from "../../config";
 import request from "../../utils/request";
 import TableGrid from "../../components/TableGrid";
 import Link from "next/link";
@@ -103,10 +103,7 @@ const rows = [
 ];
 
 export async function getServerSideProps() {
-  const data = await request(API_URL, {
-    type: "part",
-    action: "view",
-  });
+  const data = await request(API_URL, PartView);
   return {
     props: {
       data,

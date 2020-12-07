@@ -5,7 +5,7 @@ import TableGrid from "../../components/TableGrid";
 import { PlusCircle as PlusCircleIcon } from "react-feather";
 import { Box, Button } from "@material-ui/core";
 import Link from "next/link";
-import { API_URL } from "../../config";
+import { API_URL, SiteView } from "../../config";
 import request from "../../utils/request";
 
 export default function Home({ data }) {
@@ -104,10 +104,7 @@ const rows = [
 ];
 
 export async function getServerSideProps() {
-  const data = await request(API_URL, {
-    type: "site",
-    action: "view",
-  });
+  const data = await request(API_URL, SiteView);
   return {
     props: {
       data,

@@ -1,7 +1,7 @@
 import MainLayout from "../../layouts/MainLayout";
 import { Search as SearchIcon } from "react-feather";
 import TableGrid from "../../components/TableGrid";
-import { API_URL } from "../../config";
+import { API_URL, InboundView } from "../../config";
 import request from "../../utils/request";
 import {
   Box,
@@ -105,10 +105,7 @@ const rows = [
 ];
 
 export async function getServerSideProps() {
-  const data = await request(API_URL, {
-    type: "inbound",
-    action: "gridview",
-  });
+  const data = await request(API_URL, InboundView);
   return {
     props: {
       data,

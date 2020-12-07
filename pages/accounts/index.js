@@ -6,7 +6,7 @@ import { PlusCircle as PlusCircleIcon } from "react-feather";
 import { Box, Button } from "@material-ui/core";
 import Link from "next/link";
 import TableGrid from "../../components/TableGrid";
-import { API_URL } from "../../config";
+import { API_URL, AccountView } from "../../config";
 import request from "../../utils/request";
 export default function Accounts({ data }) {
   const [open, setOpen] = React.useState(false);
@@ -80,10 +80,7 @@ const rows = [
 ];
 
 export async function getServerSideProps() {
-  const data = await request(API_URL, {
-    type: "account",
-    action: "view",
-  });
+  const data = await request(API_URL, AccountView);
   return {
     props: {
       data,

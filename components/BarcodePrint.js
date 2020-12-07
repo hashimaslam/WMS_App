@@ -1,5 +1,6 @@
 import React from "react";
 import Barcode from "react-barcode";
+
 class BarcodePrint extends React.Component {
   constructor(props) {
     super(props);

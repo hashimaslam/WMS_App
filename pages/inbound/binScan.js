@@ -23,6 +23,7 @@ import {
 } from "../../modules/inbound/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
+import { number } from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   scanItem: {
@@ -61,6 +62,7 @@ export default function binSacn() {
   const { bodyObj, locationData, partData, partBarcode, error } = state;
   const [loading, setLoading] = useState(false);
   const [play] = useSound(scanFx, { volume: 0.5 });
+  const [validate, setValidate] = useState(false);
   const [scannerState, setScannerState] = useState({
     messageKeyBase: 0,
     text: "",
@@ -68,18 +70,20 @@ export default function binSacn() {
   });
   const [docNumber, setDocNumber] = useState(null);
   const [partQty, setPartQty] = useState(null);
-  const [barcodeManual, setBarcodeManual] = useState("");
+  const [barcodeManual, setBarcodeManual] = useState(null);
   const [all, setAll] = useState(false);
 
   useEffect(() => {
     setPartQty(null);
     setDocNumber(null);
-    setBarcodeManual("");
+    setBarcodeManual(null);
   }, [locationData]);
   useEffect(() => {
-    partQty !== null ? setAll(true) : setAll(false);
+    partQty !== null && partQty !== "" ? setAll(true) : setAll(false);
   }, [partQty]);
   useEffect(() => {
+    setDocNumber(null);
+    setPartQty(null);
     if (partData.parttype === "NV") {
       setAll(true);
     } else {
@@ -117,35 +121,56 @@ export default function binSacn() {
     });
   };
   const handlePartQty = (e) => {
-    let tempAvailQty = partData.requestquantity - partData.scannedquantity;
-    if (
-      e.target.value > partData.requestquantity ||
-      e.target.value > tempAvailQty
-    ) {
-      enqueueSnackbar(
-        "Entered quantity higher than requested quantity of" +
-          " " +
-          partData.requestquantity +
-          " " +
-          "or greater than scanned Quantity of" +
-          " " +
-          (partData.requestquantity - partData.scannedquantity),
-        {
-          variant: "error",
-          anchorOrigin: {
-            vertical: "top",
-            horizontal: "center",
-          },
-        }
-      );
+    if (!Number(e.target.value)) {
       setPartQty("");
     } else {
-      setPartQty(e.target.value);
+      let tempAvailQty = partData.requestquantity - partData.scannedquantity;
+      if (
+        e.target.value > partData.requestquantity ||
+        e.target.value > tempAvailQty
+      ) {
+        enqueueSnackbar(
+          "Entered quantity higher than requested quantity of" +
+            " " +
+            partData.requestquantity +
+            " " +
+            "or greater than scanned Quantity of" +
+            " " +
+            (partData.requestquantity - partData.scannedquantity),
+          {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "center",
+            },
+          }
+        );
+        setPartQty("");
+      } else {
+        setPartQty(e.target.value);
+      }
     }
   };
   const handleManualBarcode = (e) => {
-    setBarcodeManual(e.target.value);
+    if (
+      e.target.value === "" ||
+      e.target.value === undefined ||
+      e.target.value === null
+    ) {
+      setBarcodeManual(null);
+    } else {
+      setBarcodeManual(e.target.value);
+    }
   };
+  useEffect(() => {
+    if (barcodeManual === null || barcodeManual === "") {
+      console.log(barcodeManual, "from");
+      setValidate(true);
+    } else {
+      setValidate(false);
+    }
+  }, [barcodeManual]);
+
   const checkManualBarcode = async () => {
     setLoading(true);
     let newObj = {
@@ -240,9 +265,10 @@ export default function binSacn() {
           flexDirection="column"
           justifyContent="center"
           alignItems="center"
+          boxShadow={7}
         >
           {locationData.location ? (
-            <Box className={classes.codeLabels} component="div" mt={2}>
+            <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
               <Typography className={classes.strongTxt}>LOCATION</Typography>
               <Typography>{locationData.location}</Typography>
             </Box>
@@ -277,15 +303,7 @@ export default function binSacn() {
               />
             </>
           )}
-          {/* {partData.parttype !== undefined && partData.parttype === "NV" && (
-            <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
-              <Typography>Scanned</Typography>
-              <Typography>
-                {partData.scannedquantity}/
-                {partData.requestquantity - partData.scannedquantity}
-              </Typography>
-            </Box>
-          )} */}
+
           {partData.parttype !== undefined && partData.parttype === "NVNU" && (
             <>
               <FormControl
@@ -336,7 +354,7 @@ export default function binSacn() {
             <TextField
               variant="outlined"
               margin="dense"
-              label="Barcode Value"
+              label="Barcode"
               style={{
                 width: "100%",
                 marginBottom: "10px",
@@ -347,9 +365,10 @@ export default function binSacn() {
             />
             <Button
               color="primary"
-              variant="outlined"
+              variant="contained"
               size="medium"
               onClick={checkManualBarcode}
+              disabled={validate}
             >
               Validate
             </Button>

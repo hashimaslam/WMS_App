@@ -20,7 +20,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 
 import {
   Grid as GridIcon,
-  BarChart as BarChartIcon,
+  BarChart2 as BarChartIcon,
   Users as UsersIcon,
   ArrowDownCircle as ArrowDownIcon,
   ArrowUpCircle as ArrowUpIcon,
@@ -57,11 +57,11 @@ const items = [
   },
 ];
 const inbound = [
-  {
-    href: "/inbound/dockin",
-    icon: DockinIcon,
-    title: "DockIn",
-  },
+  // {
+  //   href: "/inbound/dockin",
+  //   icon: DockinIcon,
+  //   title: "DockIn",
+  // },
   {
     href: "/inbound/binning",
     icon: BinningIcon,
@@ -80,6 +80,8 @@ const outbound = [
   //   title: "Dispatch",
   // },
 ];
+
+const reports = [{}];
 
 const useStyles = makeStyles((theme) => ({
   mobileDrawer: {
@@ -206,6 +208,29 @@ const NavBar = ({ onMobileClose, openMobile }) => {
                 icon={item.icon}
               />
             ))}
+          </Collapse>
+          <Link href="/reports">
+            <ListItem
+              disableGutters
+              button
+              // onClick={() => setMasterOpen(!masterOpen)}
+              className={classes.button}
+            >
+              <BarChartIcon className={classes.icon} size="20" />
+              <span className={classes.title}>Reports</span>
+
+              {/* {masterOpen ? <ExpandLess /> : <ExpandMore />} */}
+            </ListItem>
+          </Link>
+          <Collapse in={masterOpen} timeout="auto" unmountOnExit>
+            {/* {items.map((item) => (
+              <NavItem
+                href={item.href}
+                key={item.title}
+                title={item.title}
+                icon={item.icon}
+              />
+            ))} */}
           </Collapse>
         </List>
       </Box>

@@ -5,7 +5,7 @@ import {
   SET_PART_BARCODE,
 } from "./actions";
 
-const initialTimerState = {
+const initialState = {
   partData: [],
   partBarcode: null,
   error: {
@@ -19,7 +19,7 @@ const initialTimerState = {
   },
 };
 
-export const outBound = (state = initialTimerState, { type, payload }) => {
+export const outBound = (state = initialState, { type, payload }) => {
   switch (type) {
     case SET_PARTDATA:
       return {

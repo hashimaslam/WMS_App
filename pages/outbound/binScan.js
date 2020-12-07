@@ -61,12 +61,12 @@ export default function binSacn() {
   const { bodyObj, partData, partBarcode, error } = state;
   const [loading, setLoading] = useState(false);
   const [play] = useSound(scanFx, { volume: 0.5 });
+  const [validate, setValidate] = useState(false);
   const [scannerState, setScannerState] = useState({
     messageKeyBase: 0,
     text: "",
     bShowScanner: false,
   });
-  //   const [docNumber, setDocNumber] = useState(null);
   const [location, setLocation] = useState(undefined);
   const [partQty, setPartQty] = useState(null);
   const [barcodeManual, setBarcodeManual] = useState(undefined);
@@ -127,38 +127,61 @@ export default function binSacn() {
     });
   };
   const handlePartQty = (e) => {
-    let tempStockQty;
-    partData.location.map((i) => {
-      i.name === location ? (tempStockQty = i.stockquantity) : null;
-    });
-    if (
-      e.target.value > tempStockQty ||
-      e.target.value > partData.requestquantity
-    ) {
-      enqueueSnackbar(
-        "Entered quantity higher than requested quantity of" +
-          " " +
-          partData.requestquantity +
-          " " +
-          "or greater than Stock Quantity of" +
-          " " +
-          tempStockQty,
-        {
-          variant: "error",
-          anchorOrigin: {
-            vertical: "top",
-            horizontal: "center",
-          },
-        }
-      );
+    if (!Number(e.target.value)) {
       setPartQty("");
     } else {
-      setPartQty(e.target.value);
+      let tempScannedQty;
+      let tempStockQty;
+      partData.location.map((i) => {
+        if (i.name === location) {
+          tempScannedQty = i.scannedquantity;
+          tempStockQty = i.stockquantity;
+        }
+      });
+      if (
+        e.target.value > tempScannedQty ||
+        e.target.value > partData.requestquantity - tempScannedQty
+      ) {
+        enqueueSnackbar(
+          "Entered quantity higher than remaining quantity of" +
+            " " +
+            (partData.requestquantity - tempScannedQty) +
+            " " +
+            "or greater than Stock Quantity of" +
+            " " +
+            tempStockQty,
+          {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "center",
+            },
+          }
+        );
+        setPartQty("");
+      } else {
+        setPartQty(e.target.value);
+      }
     }
   };
   const handleManualBarcode = (e) => {
-    setBarcodeManual(e.target.value);
+    if (
+      e.target.value === "" ||
+      e.target.value === undefined ||
+      e.target.value === null
+    ) {
+      setBarcodeManual(null);
+    } else {
+      setBarcodeManual(e.target.value);
+    }
   };
+  useEffect(() => {
+    if (barcodeManual === null || barcodeManual === "") {
+      setValidate(true);
+    } else {
+      setValidate(false);
+    }
+  }, [barcodeManual]);
   const checkManualBarcode = async () => {
     setLoading(true);
     let newObj = {
@@ -288,15 +311,6 @@ export default function binSacn() {
           ) : (
             ""
           )}
-          {/* {partData.parttype !== undefined && partData.parttype === "NV" && (
-              <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
-                <Typography>Scanned</Typography>
-                <Typography>
-                  {partData.scannedquantity}/
-                  {partData.requestquantity - partData.scannedquantity}
-                </Typography>
-              </Box>
-            )} */}
 
           <Box
             display="flex"
@@ -306,7 +320,7 @@ export default function binSacn() {
             <TextField
               variant="outlined"
               margin="dense"
-              label="Barcode Value"
+              label="Barcode"
               style={{
                 width: "100%",
                 marginBottom: "10px",
@@ -320,6 +334,7 @@ export default function binSacn() {
               variant="contained"
               size="medium"
               onClick={checkManualBarcode}
+              disabled={validate}
             >
               Validate
             </Button>

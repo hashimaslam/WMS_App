@@ -6,7 +6,7 @@ import { PlusCircle as PlusCircleIcon } from "react-feather";
 import { Box, Button } from "@material-ui/core";
 import Link from "next/link";
 
-import { API_URL } from "../../config";
+import { API_URL, LocationView } from "../../config";
 import request from "../../utils/request";
 export default function Locations({ data }) {
   const [open, setOpen] = React.useState(false);
@@ -128,10 +128,7 @@ const rows = [
 ];
 
 export async function getServerSideProps() {
-  const data = await request(API_URL, {
-    type: "location",
-    action: "view",
-  });
+  const data = await request(API_URL, LocationView);
   return {
     props: {
       data,

@@ -1,5 +1,4 @@
 import {
-  SET_REQUESTS,
   SET_PARTDATA,
   SET_LOCATIONDATA,
   SET_BODYOBJ,
@@ -7,7 +6,7 @@ import {
   SET_PART_BARCODE,
 } from "./actions";
 
-const initialTimerState = {
+const initialState = {
   partData: [],
   locationData: [],
   partBarcode: null,
@@ -25,13 +24,8 @@ const initialTimerState = {
   },
 };
 
-export const inBound = (state = initialTimerState, { type, payload }) => {
+export const inBound = (state = initialState, { type, payload }) => {
   switch (type) {
-    case SET_REQUESTS:
-      return {
-        ...state,
-        requests: [...state.requests, payload],
-      };
     case SET_LOCATIONDATA:
       return {
         ...state,
