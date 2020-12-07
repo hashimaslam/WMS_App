@@ -130,11 +130,11 @@ export default function binSacn() {
         e.target.value > tempAvailQty
       ) {
         enqueueSnackbar(
-          "Entered quantity higher than requested quantity of" +
+          "Entered quantity higher than Requested quantity of" +
             " " +
             partData.requestquantity +
             " " +
-            "or greater than scanned Quantity of" +
+            "or greater than Remaining Quantity of" +
             " " +
             (partData.requestquantity - partData.scannedquantity),
           {

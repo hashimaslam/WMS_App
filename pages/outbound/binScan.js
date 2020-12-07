@@ -139,7 +139,7 @@ export default function binSacn() {
         }
       });
       if (
-        e.target.value > tempScannedQty ||
+        e.target.value > tempStockQty ||
         e.target.value > partData.requestquantity - tempScannedQty
       ) {
         enqueueSnackbar(

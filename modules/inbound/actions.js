@@ -134,7 +134,7 @@ export const stateReset = async (dispatch, state) => {
     ...state.bodyObj,
     data: {
       ...state.bodyObj.data,
-      islocation: true,
+      islocation: false,
     },
   };
   // dispatch(setLocationData([]));
