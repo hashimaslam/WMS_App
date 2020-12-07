@@ -43,7 +43,6 @@ export default function MyApp(props) {
           <GlobalStyles />
           <SnackbarProvider
             ref={notistackRef}
-            maxSnack={3}
             action={(key) => (
               <Button onClick={onClickDismiss(key)} style={{ color: "white" }}>
                 <CrossIcon />

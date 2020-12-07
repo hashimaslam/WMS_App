@@ -25,7 +25,7 @@ export default function Home({ data }) {
             <Button
               color="primary"
               size="medium"
-              variant="contained"
+              variant="outlined"
               startIcon={<PlusCircleIcon />}
             >
               Add New Site

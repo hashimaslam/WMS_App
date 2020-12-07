@@ -25,7 +25,7 @@ export default function Accounts({ data }) {
             <Button
               color="primary"
               size="medium"
-              variant="contained"
+              variant="outlined"
               startIcon={<PlusCircleIcon />}
             >
               Add New Account

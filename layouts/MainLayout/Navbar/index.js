@@ -74,11 +74,11 @@ const outbound = [
     icon: PickingIcon,
     title: "Picking",
   },
-  {
-    href: "/outbound/dispatch",
-    icon: DispatchIcon,
-    title: "Dispatch",
-  },
+  // {
+  //   href: "/outbound/dispatch",
+  //   icon: DispatchIcon,
+  //   title: "Dispatch",
+  // },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
     width: 256,
     top: 64,
     height: "calc(100% - 64px)",
+    zIndex: 100,
   },
   avatar: {
     cursor: "pointer",

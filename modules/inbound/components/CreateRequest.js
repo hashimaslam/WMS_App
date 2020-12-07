@@ -262,7 +262,7 @@ function CreateRequest({ dispatch }) {
           </CardContent>
         </Card>
         <Box mt={3} display="flex" justifyContent="flex-end">
-          <Button color="primary" variant="contained" onClick={handleSubmit}>
+          <Button color="primary" variant="outlined" onClick={handleSubmit}>
             Add
           </Button>
         </Box>

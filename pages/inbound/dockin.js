@@ -16,7 +16,7 @@ export default function InboundDockin({ data }) {
             <Button
               color="primary"
               size="medium"
-              variant="contained"
+              variant="outlined"
               startIcon={<PlusCircleIcon />}
             >
               Create Request

@@ -15,11 +15,17 @@ import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
 import InputIcon from "@material-ui/icons/Input";
 
-const useStyles = makeStyles(() => ({
-  root: {},
+const useStyles = makeStyles((theme) => ({
+  root: {
+    background: "white",
+    zIndex: 1000,
+  },
   avatar: {
     width: 60,
     height: 60,
+  },
+  icons: {
+    color: theme.palette.textGrey.primary,
   },
 }));
 
@@ -32,7 +38,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
       <Toolbar>
         <Box flexGrow={1} />
         <Hidden mdDown>
-          <IconButton color="inherit">
+          <IconButton className={classes.icons}>
             <Badge
               badgeContent={notifications.length}
               color="primary"
@@ -41,7 +47,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton className={classes.icons}>
             <InputIcon />
           </IconButton>
         </Hidden>

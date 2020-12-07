@@ -151,7 +151,7 @@ function AddForm() {
 
         <Box mt={3} display="flex" justifyContent="flex-end">
           <Link href="/">
-            <Button color="primary" variant="contained">
+            <Button color="primary" variant="outlined">
               Cancel
             </Button>
           </Link>

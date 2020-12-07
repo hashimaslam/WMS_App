@@ -57,7 +57,7 @@ function MdsearchFilter({ filterValues, handleChange, handleApply }) {
         })}
       </Grid>
       <Box display="flex" justifyContent="center" mt={2}>
-        <Button color="primary" variant="contained" onClick={handleApply}>
+        <Button color="primary" onClick={handleApply}>
           Apply
         </Button>
       </Box>

@@ -75,7 +75,7 @@ function SearchFilter({
               variant="outlined"
             />
             <Box mr={2}></Box>
-            <Button color="primary" size="medium" variant="contained">
+            <Button color="primary" size="medium" variant="outlined">
               Search
             </Button>
           </Box>

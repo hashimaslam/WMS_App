@@ -20,7 +20,7 @@ import {
   checkBarcode,
   handleInsert,
   stateReset,
-} from "../../modules/inbound/actions";
+} from "../../modules/outbound/actions";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 
@@ -57,8 +57,8 @@ export default function binSacn() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.inBound);
-  const { bodyObj, locationData, partData, partBarcode, error } = state;
+  const state = useSelector((state) => state.outBound);
+  const { bodyObj, partData, partBarcode, error } = state;
   const [loading, setLoading] = useState(false);
   const [play] = useSound(scanFx, { volume: 0.5 });
   const [scannerState, setScannerState] = useState({
@@ -66,18 +66,28 @@ export default function binSacn() {
     text: "",
     bShowScanner: false,
   });
-  const [docNumber, setDocNumber] = useState(null);
+  //   const [docNumber, setDocNumber] = useState(null);
+  const [location, setLocation] = useState(undefined);
   const [partQty, setPartQty] = useState(null);
-  const [barcodeManual, setBarcodeManual] = useState("");
+  const [barcodeManual, setBarcodeManual] = useState(undefined);
+  const [locationkey, setLocationKey] = useState(undefined);
   const [all, setAll] = useState(false);
 
   useEffect(() => {
-    setPartQty(null);
-    setDocNumber(null);
-    setBarcodeManual("");
-  }, [locationData]);
+    console.log(bodyObj);
+  }, [bodyObj]);
+
   useEffect(() => {
-    partQty !== null ? setAll(true) : setAll(false);
+    setPartQty(null);
+    setBarcodeManual("");
+    setLocation(null);
+  }, [partData]);
+  useEffect(() => {
+    if (partData.parttype === "NV") {
+      location === null || location === "" ? setAll(false) : setAll(true);
+    } else {
+      partQty === null || partQty === "" ? setAll(false) : setAll(true);
+    }
   }, [partQty]);
   useEffect(() => {
     if (partData.parttype === "NV") {
@@ -106,7 +116,7 @@ export default function binSacn() {
     setLoading(true);
     let newObj = {
       ...bodyObj,
-      data: { ...bodyObj.data, barcode: str },
+      data: str,
     };
 
     let loaded = await checkBarcode(dispatch, newObj, state, str);
@@ -117,19 +127,22 @@ export default function binSacn() {
     });
   };
   const handlePartQty = (e) => {
-    let tempAvailQty = partData.requestquantity - partData.scannedquantity;
+    let tempStockQty;
+    partData.location.map((i) => {
+      i.name === location ? (tempStockQty = i.stockquantity) : null;
+    });
     if (
-      e.target.value > partData.requestquantity ||
-      e.target.value > tempAvailQty
+      e.target.value > tempStockQty ||
+      e.target.value > partData.requestquantity
     ) {
       enqueueSnackbar(
         "Entered quantity higher than requested quantity of" +
           " " +
           partData.requestquantity +
           " " +
-          "or greater than scanned Quantity of" +
+          "or greater than Stock Quantity of" +
           " " +
-          (partData.requestquantity - partData.scannedquantity),
+          tempStockQty,
         {
           variant: "error",
           anchorOrigin: {
@@ -150,52 +163,24 @@ export default function binSacn() {
     setLoading(true);
     let newObj = {
       ...bodyObj,
-      data: {
-        islocation: false,
-        barcode: barcodeManual,
-      },
+      data: barcodeManual,
     };
     let loaded = await checkBarcode(dispatch, newObj, state, barcodeManual);
     setLoading(!loaded);
     setBarcodeManual("");
   };
-  const handleDocNumber = (e) => {
-    setDocNumber(e.target.value);
-  };
-  const handleDocPartQty = (e) => {
-    partData.documentnumber.map((i) => {
-      if (i.documentnumber === docNumber) {
-        let tempAvailQty = i.requestquantity - i.scannedquantity;
-        if (
-          e.target.value > i.requestquantity ||
-          e.target.value > tempAvailQty
-        ) {
-          enqueueSnackbar(
-            "Entered quantity higher than requested quantity of" +
-              " " +
-              i.requestquantity +
-              " " +
-              "or greater than scanned Quantity of" +
-              " " +
-              (i.requestquantity - i.scannedquantity),
-            {
-              variant: "error",
-              anchorOrigin: {
-                vertical: "top",
-                horizontal: "center",
-              },
-            }
-          );
-        } else {
-          setPartQty(e.target.value);
-        }
-      }
+
+  const handleLocation = (e) => {
+    partData.location.map((i) => {
+      i.name === e.target.value ? setLocationKey(i.locationkey) : null;
     });
+    setLocation(e.target.value);
   };
+
   const handleSubmit = async () => {
     let data = {
       quantity: partData.parttype === "NV" ? 1 : partQty,
-      documentnumber: docNumber,
+      locationkey: locationkey,
     };
     let res = await handleInsert(dispatch, data, state);
     enqueueSnackbar(res.message, {
@@ -206,6 +191,7 @@ export default function binSacn() {
       },
     });
     stateReset(dispatch, state);
+    console.log("submitted");
   };
 
   return (
@@ -241,14 +227,6 @@ export default function binSacn() {
           justifyContent="center"
           alignItems="center"
         >
-          {locationData.location ? (
-            <Box className={classes.codeLabels} component="div" mt={2}>
-              <Typography className={classes.strongTxt}>LOCATION</Typography>
-              <Typography>{locationData.location}</Typography>
-            </Box>
-          ) : (
-            ""
-          )}
           {partData.partnumber ? (
             <Box className={classes.codeLabels} component="div" mt={2}>
               <Typography className={classes.strongTxt}>PART NUMBER</Typography>
@@ -265,7 +243,38 @@ export default function binSacn() {
             </Box>
           )}
 
-          {partData.parttype !== undefined && partData.parttype === "V" && (
+          {partData.location !== undefined && (
+            <FormControl
+              variant="outlined"
+              size="small"
+              margin="dense"
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-outlined-label">
+                Location
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                label="Document Number"
+                value={location}
+                onChange={handleLocation}
+              >
+                {partData.location.map((item) => {
+                  return (
+                    <MenuItem key={item.locationkey} value={item.name}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          )}
+
+          {(partData.parttype !== undefined &&
+            location !== null &&
+            partData.parttype === "V") ||
+          partData.parttype === "NVNU" ? (
             <>
               <TextField
                 value={partQty}
@@ -276,58 +285,19 @@ export default function binSacn() {
                 style={{ width: "100%" }}
               />
             </>
+          ) : (
+            ""
           )}
           {/* {partData.parttype !== undefined && partData.parttype === "NV" && (
-            <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
-              <Typography>Scanned</Typography>
-              <Typography>
-                {partData.scannedquantity}/
-                {partData.requestquantity - partData.scannedquantity}
-              </Typography>
-            </Box>
-          )} */}
-          {partData.parttype !== undefined && partData.parttype === "NVNU" && (
-            <>
-              <FormControl
-                variant="outlined"
-                size="small"
-                margin="dense"
-                className={classes.formControl}
-              >
-                <InputLabel id="demo-simple-select-outlined-label">
-                  Document Number
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  label="Document Number"
-                  value={docNumber}
-                  onChange={handleDocNumber}
-                >
-                  {partData.documentnumber.map((item, index) => {
-                    return (
-                      <MenuItem
-                        key={item.requestkey}
-                        value={item.documentnumber}
-                      >
-                        {item.documentnumber}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              {docNumber !== null && (
-                <TextField
-                  value={partQty}
-                  variant="outlined"
-                  margin="dense"
-                  label="Quantity"
-                  onChange={handleDocPartQty}
-                  style={{ width: "100%" }}
-                />
-              )}
-            </>
-          )}
+              <Box className={classes.codeLabels} component="div" mt={2} mb={2}>
+                <Typography>Scanned</Typography>
+                <Typography>
+                  {partData.scannedquantity}/
+                  {partData.requestquantity - partData.scannedquantity}
+                </Typography>
+              </Box>
+            )} */}
+
           <Box
             display="flex"
             justifyContent="space-between"
@@ -347,7 +317,7 @@ export default function binSacn() {
             />
             <Button
               color="primary"
-              variant="outlined"
+              variant="contained"
               size="medium"
               onClick={checkManualBarcode}
             >
@@ -355,7 +325,7 @@ export default function binSacn() {
             </Button>
           </Box>
           {all && (
-            <Button color="primary" variant="contained" onClick={handleSubmit}>
+            <Button color="primary" variant="outlined" onClick={handleSubmit}>
               Apply
             </Button>
           )}

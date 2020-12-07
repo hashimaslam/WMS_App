@@ -38,7 +38,7 @@ export default function PrintModal({ value }) {
       <Button
         color="primary"
         size="small"
-        variant="contained"
+        variant="outlined"
         startIcon={<PrinterIcon size="15" />}
         onClick={handleClickOpen}
       >
@@ -53,7 +53,12 @@ export default function PrintModal({ value }) {
           <BarcodePrint ref={componentRef} value={value} />
         </Box>
         <DialogActions>
-          <Button autoFocus onClick={handlePrint} color="primary">
+          <Button
+            autoFocus
+            onClick={handlePrint}
+            color="primary"
+            variant="outlined"
+          >
             Print
           </Button>
           <Button onClick={handleClose} color="primary" autoFocus>

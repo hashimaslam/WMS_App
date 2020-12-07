@@ -28,11 +28,24 @@ const useStyles = makeStyles((theme) => ({
   printComp: {
     display: "none",
   },
+  tableHead: {
+    color: "#3523c2",
+    background: "#cbc8e3",
+  },
 }));
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
+    color: "#546E7A",
+    background: "white",
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+const StyledTableHeader = withStyles(() => ({
+  head: {
+    color: "#3523c2",
+    background: "#cbc8e3",
   },
   body: {
     fontSize: 14,
@@ -41,9 +54,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
+    backgroundColor: "white",
   },
 }))(TableRow);
 
@@ -99,7 +110,7 @@ const TableGrid = ({ className, data, row, barcodeKey, print, ...rest }) => {
     <Card className={clsx(classes.root, className)} {...rest}>
       {/* <PerfectScrollbar> */}
       <Box minWidth={1050}>
-        <Table>
+        <Table className={classes.tableHead}>
           <TableHead>
             <TableRow>
               {/* <TableCell padding="checkbox">
@@ -114,9 +125,9 @@ const TableGrid = ({ className, data, row, barcodeKey, print, ...rest }) => {
                 />
               </TableCell> */}
               {row.map((i) => {
-                return <StyledTableCell>{i.name}</StyledTableCell>;
+                return <StyledTableHeader>{i.name}</StyledTableHeader>;
               })}
-              {print && <StyledTableCell>Actions</StyledTableCell>}
+              {print && <StyledTableHeader>Actions</StyledTableHeader>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -124,7 +135,7 @@ const TableGrid = ({ className, data, row, barcodeKey, print, ...rest }) => {
               return (
                 <>
                   <StyledTableRow
-                    hover
+                    hover={false}
                     key={index}
                     // selected={selectedDataIds.indexOf(item.id) !== -1}
                   >

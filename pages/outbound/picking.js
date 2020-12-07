@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: "100%",
   },
 }));
-export default function InboundBinning({ data }) {
+export default function OutboundPicking({ data }) {
   const classes = useStyles();
 
   return (
@@ -47,7 +47,7 @@ export default function InboundBinning({ data }) {
                     variant="outlined"
                   />
                   <Box mr={2}></Box>
-                  <Link href="/inbound/binScan">
+                  <Link href="/outbound/binScan">
                     <Button color="primary" size="medium" variant="outlined">
                       Scan
                     </Button>
@@ -61,7 +61,7 @@ export default function InboundBinning({ data }) {
           <TableGrid
             data={data}
             row={rows}
-            print={true}
+            print={false}
             barcodeKey={"barcode"}
           />
         </Box>
@@ -86,10 +86,6 @@ const rows = [
     name: "Invoice Number",
     key: "documentnumber",
   },
-  // {
-  //   name: "Internal ID",
-  //   key: "referenceid",
-  // },
   {
     name: "Part Number",
     key: "partnumber",
@@ -106,7 +102,7 @@ const rows = [
 
 export async function getServerSideProps() {
   const data = await request(API_URL, {
-    type: "inbound",
+    type: "outbound",
     action: "gridview",
   });
   return {
