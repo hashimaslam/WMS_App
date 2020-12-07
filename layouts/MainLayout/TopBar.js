@@ -27,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
   icons: {
     color: theme.palette.textGrey.primary,
   },
+  menuIcon: {
+    color: theme.palette.textGrey.primary,
+    border: `1px solid ${theme.palette.textGrey.primary}`,
+    borderRadius: 5,
+    padding: "8px 8px",
+  },
 }));
 
 const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
@@ -52,7 +58,7 @@ const TopBar = ({ className, onMobileNavOpen, ...rest }) => {
           </IconButton>
         </Hidden>
         <Hidden lgUp>
-          <IconButton color="inherit" onClick={onMobileNavOpen}>
+          <IconButton className={classes.menuIcon} onClick={onMobileNavOpen}>
             <MenuIcon />
           </IconButton>
         </Hidden>
